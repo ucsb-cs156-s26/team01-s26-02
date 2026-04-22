@@ -23,4 +23,4 @@ repo_name: "TBD"
 repo: ucsb-cs156-s26/team01-s26-02
 owner: ucsb-cs156-s26
 repo_name: team01-s26-02
-pull_requests: [{"author":{"id":"U_kgDOB2-xoA","is_bot":false,"login":"dchen451","name":"David Chen"},"headRefName":"dchen451-helprequest-create-db","number":44,"title":"dc - create database table for HelpRequest","url":"https://github.com/ucsb-cs156-s26/team01-s26-02/pull/44"}]
+pull_requests: []
