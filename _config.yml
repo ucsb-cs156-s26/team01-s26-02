@@ -23,4 +23,4 @@ repo_name: "TBD"
 repo: ucsb-cs156-s26/team01-s26-02
 owner: ucsb-cs156-s26
 repo_name: team01-s26-02
-pull_requests: [{"author":{"id":"U_kgDOBztTrQ","is_bot":false,"login":"Makkerel","name":"Kevin "},"headRefName":"Kevin-UCSBOrganization-create-db","number":48,"title":"Kevin ucsb organization create db","url":"https://github.com/ucsb-cs156-s26/team01-s26-02/pull/48"}]
+pull_requests: [{"author":{"id":"U_kgDOB2-xoA","is_bot":false,"login":"dchen451","name":"David Chen"},"headRefName":"dchen451-helprequest-controller","number":49,"title":"dc - test coverage for HelpRequestsControllerTests (jacoco at 100%)","url":"https://github.com/ucsb-cs156-s26/team01-s26-02/pull/49"},{"author":{"id":"U_kgDOBztTrQ","is_bot":false,"login":"Makkerel","name":"Kevin "},"headRefName":"Kevin-UCSBOrganization-create-db","number":48,"title":"Kevin ucsb organization create db","url":"https://github.com/ucsb-cs156-s26/team01-s26-02/pull/48"}]
