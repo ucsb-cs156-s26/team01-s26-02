@@ -23,4 +23,4 @@ repo_name: "TBD"
 repo: ucsb-cs156-s26/team01-s26-02
 owner: ucsb-cs156-s26
 repo_name: team01-s26-02
-pull_requests: [{"author":{"id":"U_kgDOBztTrQ","is_bot":false,"login":"Makkerel","name":"Kevin "},"headRefName":"Kevin-UCSBOrganizationController","number":50,"title":"added UCSB Organization controller and also got 100% mutation and line coverage","url":"https://github.com/ucsb-cs156-s26/team01-s26-02/pull/50"}]
+pull_requests: [{"author":{"id":"U_kgDOBztTrQ","is_bot":false,"login":"Makkerel","name":"Kevin "},"headRefName":"Kevin-GETforSingleRecord","number":51,"title":"Kevin ge tfor single record","url":"https://github.com/ucsb-cs156-s26/team01-s26-02/pull/51"},{"author":{"id":"U_kgDOBztTrQ","is_bot":false,"login":"Makkerel","name":"Kevin "},"headRefName":"Kevin-UCSBOrganizationController","number":50,"title":"added UCSB Organization controller and also got 100% mutation and line coverage","url":"https://github.com/ucsb-cs156-s26/team01-s26-02/pull/50"}]
