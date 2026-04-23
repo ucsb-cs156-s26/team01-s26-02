@@ -15,6 +15,8 @@ import edu.ucsb.cs156.example.repositories.UCSBOrganizationRepository;
 import edu.ucsb.cs156.example.repositories.UserRepository;
 import edu.ucsb.cs156.example.testconfig.TestConfig;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
@@ -72,6 +74,13 @@ public class UCSBOrganizationControllerTests extends ControllerTestCase {
     String expectedJson = mapper.writeValueAsString(organizations);
     String responseString = response.getResponse().getContentAsString();
     assertEquals(expectedJson, responseString);
+  }
+
+  @Test
+  public void logged_out_users_cannot_get_by_id() throws Exception {
+    mockMvc
+        .perform(get("/api/ucsborganization").param("orgCode", "123"))
+        .andExpect(status().is(403)); // logged out users can't get by id
   }
 
   // Authorization tests for /api/ucsbdiningcommons/post
@@ -137,5 +146,49 @@ public class UCSBOrganizationControllerTests extends ControllerTestCase {
     String expectedJson = mapper.writeValueAsString(mahjong);
     String responseString = response.getResponse().getContentAsString();
     assertEquals(expectedJson, responseString);
+  }
+
+  // Tests for GET for single organization
+
+  @WithMockUser(roles = {"USER"})
+  @Test
+  public void test_that_logged_in_user_can_get_by_id_when_the_id_exists() throws Exception {
+    UCSBOrganization mahjong =
+        UCSBOrganization.builder()
+            .orgCode("MHJ")
+            .orgTranslationShort("Mahjong Club")
+            .orgTranslation("Asian Board Games Club")
+            .inactive(true)
+            .build();
+
+    when(ucsbOrganizationRepository.findById(eq("MHJ"))).thenReturn(Optional.of(mahjong));
+
+    MvcResult response =
+        mockMvc
+            .perform(get("/api/ucsborganization").param("orgCode", "MHJ"))
+            .andExpect(status().isOk())
+            .andReturn();
+
+    verify(ucsbOrganizationRepository, times(1)).findById(eq("MHJ"));
+    String expectedJson = mapper.writeValueAsString(mahjong);
+    String responseString = response.getResponse().getContentAsString();
+    assertEquals(expectedJson, responseString);
+  }
+
+  @WithMockUser(roles = {"USER"})
+  @Test
+  public void test_that_logged_in_user_can_get_by_id_when_the_id_does_not_exist() throws Exception {
+    when(ucsbOrganizationRepository.findById(eq("CHS"))).thenReturn(Optional.empty());
+
+    MvcResult response =
+        mockMvc
+            .perform(get("/api/ucsborganization").param("orgCode", "CHS"))
+            .andExpect(status().isNotFound())
+            .andReturn();
+
+    verify(ucsbOrganizationRepository, times(1)).findById(eq("CHS"));
+    Map<String, Object> json = responseToJson(response);
+    assertEquals("EntityNotFoundException", json.get("type"));
+    assertEquals("UCSBOrganization with id CHS not found", json.get("message"));
   }
 }
