@@ -34,13 +34,13 @@
                 },
                 {
                   "column": {
-                    "name": "ORG_TRANSLATION_SHORT",
+                    "name": "ORGTRANSLATIONSHORT",
                     "type": "VARCHAR(255)"
                   }
                 },
                 {
                   "column": {
-                    "name": "ORG_TRANSLATION",
+                    "name": "ORGTRANSLATION",
                     "type": "VARCHAR(255)"
                   }
                 },
