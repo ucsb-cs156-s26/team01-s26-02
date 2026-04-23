@@ -149,4 +149,45 @@ public class HelpRequestsControllerTests extends ControllerTestCase {
     String responseString = response.getResponse().getContentAsString();
     assertEquals(expectedJson, responseString);
   }
+
+  @WithMockUser(roles = {"ADMIN", "USER"})
+  @Test
+  public void an_admin_user_can_post_a_solved_helprequest() throws Exception {
+    // arrange
+
+    LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
+
+    HelpRequest helpRequest1 =
+        HelpRequest.builder()
+            .requesterEmail("dchen451@ucsb.edu")
+            .teamId("team2")
+            .tableOrBreakoutRoom("table2")
+            .requestTime(ldt1)
+            .explanation("I need help with my code")
+            .solved(true)
+            .build();
+
+    when(helpRequestRepository.save(eq(helpRequest1))).thenReturn(helpRequest1);
+
+    // act
+    MvcResult response =
+        mockMvc
+            .perform(
+                post("/api/helprequests/post")
+                    .param("requesterEmail", "dchen451@ucsb.edu")
+                    .param("teamId", "team2")
+                    .param("tableOrBreakoutRoom", "table2")
+                    .param("requestTime", "2022-01-03T00:00:00")
+                    .param("explanation", "I need help with my code")
+                    .param("solved", "true")
+                    .with(csrf()))
+            .andExpect(status().isOk())
+            .andReturn();
+
+    // assert
+    verify(helpRequestRepository, times(1)).save(eq(helpRequest1));
+    String expectedJson = mapper.writeValueAsString(helpRequest1);
+    String responseString = response.getResponse().getContentAsString();
+    assertEquals(expectedJson, responseString);
+  }
 }
