@@ -1,0 +1,62 @@
+{
+    "databaseChangeLog": [
+      {
+        "changeSet": {
+          "id": "Articles-1",
+          "author": "Bombboox",
+          "preConditions": [
+            {
+              "onFail": "MARK_RAN"
+            },
+            {
+              "not": [
+                {
+                  "tableExists": {
+                    "tableName": "Articles"
+                  }
+                }
+              ]
+            }
+          ],
+          "changes": [
+            {
+              "createTable": {
+                "columns": [
+                  {
+                    "column": {
+                      "autoIncrement": true,
+                      "constraints": {
+                        "primaryKey": true,
+                        "primaryKeyName": "ARTICLES_PK"
+                      },
+                      "name": "ID",
+                      "type": "BIGINT"
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "LOCAL_DATE_TIME",
+                      "type": "TIMESTAMP"
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "NAME",
+                      "type": "VARCHAR(255)"
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "QUARTERYYYYQ",
+                      "type": "VARCHAR(255)"
+                    }
+                  }
+                ],
+                "tableName": "Articles"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
