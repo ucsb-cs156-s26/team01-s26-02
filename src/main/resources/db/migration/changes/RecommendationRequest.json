@@ -28,7 +28,7 @@
                       "autoIncrement": true,
                       "constraints": {
                         "primaryKey": true,
-                        "primaryKeyName": "RECOMMENDATION_REQUESTS_PK"
+                        "primaryKeyName": "RECOMMENDATIONREQUESTS_PK"
                       },
                       "name": "ID",
                       "type": "BIGINT"
@@ -71,7 +71,7 @@
                     }
                   }
                 ],
-                "tableName": "RECOMMENDATION_REQUESTS"
+                "tableName": "RECOMMENDATIONREQUESTS"
               }
             }
           ]
