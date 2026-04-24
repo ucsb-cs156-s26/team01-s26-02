@@ -1,62 +1,60 @@
 {
-    "databaseChangeLog": [
-      {
-        "changeSet": {
-          "id": "Articles-1",
-          "author": "Bombboox",
-          "preConditions": [
-            {
-              "onFail": "MARK_RAN"
-            },
-            {
-              "not": [
+  "databaseChangeLog": [
+    {
+      "changeSet": {
+        "id": "Articles-1",
+        "author": "Bombboox",
+        "changes": [
+          {
+            "createTable": {
+              "tableName": "articles",
+              "columns": [
                 {
-                  "tableExists": {
-                    "tableName": "Articles"
+                  "column": {
+                    "name": "id",
+                    "type": "BIGINT",
+                    "autoIncrement": true,
+                    "constraints": {
+                      "primaryKey": true,
+                      "primaryKeyName": "ARTICLES_PK"
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "title",
+                    "type": "VARCHAR(255)"
+                  }
+                },
+                {
+                  "column": {
+                    "name": "url",
+                    "type": "VARCHAR(255)"
+                  }
+                },
+                {
+                  "column": {
+                    "name": "explanation",
+                    "type": "VARCHAR(1000)"
+                  }
+                },
+                {
+                  "column": {
+                    "name": "email",
+                    "type": "VARCHAR(255)"
+                  }
+                },
+                {
+                  "column": {
+                    "name": "date_added",
+                    "type": "TIMESTAMP"
                   }
                 }
               ]
             }
-          ],
-          "changes": [
-            {
-              "createTable": {
-                "columns": [
-                  {
-                    "column": {
-                      "autoIncrement": true,
-                      "constraints": {
-                        "primaryKey": true,
-                        "primaryKeyName": "ARTICLES_PK"
-                      },
-                      "name": "ID",
-                      "type": "BIGINT"
-                    }
-                  },
-                  {
-                    "column": {
-                      "name": "LOCAL_DATE_TIME",
-                      "type": "TIMESTAMP"
-                    }
-                  },
-                  {
-                    "column": {
-                      "name": "NAME",
-                      "type": "VARCHAR(255)"
-                    }
-                  },
-                  {
-                    "column": {
-                      "name": "QUARTERYYYYQ",
-                      "type": "VARCHAR(255)"
-                    }
-                  }
-                ],
-                "tableName": "Articles"
-              }
-            }
-          ]
-        }
+          }
+        ]
       }
-    ]
-  }
+    }
+  ]
+}
