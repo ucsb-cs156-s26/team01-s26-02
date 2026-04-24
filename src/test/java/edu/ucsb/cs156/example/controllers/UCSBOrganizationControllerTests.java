@@ -20,6 +20,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MvcResult;
@@ -189,6 +190,78 @@ public class UCSBOrganizationControllerTests extends ControllerTestCase {
     verify(ucsbOrganizationRepository, times(1)).findById(eq("CHS"));
     Map<String, Object> json = responseToJson(response);
     assertEquals("EntityNotFoundException", json.get("type"));
+    assertEquals("UCSBOrganization with id CHS not found", json.get("message"));
+  }
+
+  // Tests for PUT for an organization
+  @WithMockUser(roles = {"ADMIN", "USER"})
+  @Test
+  public void admin_can_edit_an_existing_organization() throws Exception {
+    UCSBOrganization mahjongOrig =
+        UCSBOrganization.builder()
+            .orgCode("MHJ")
+            .orgTranslationShort("Mahjong Club")
+            .orgTranslation("Asian Board Games Club")
+            .inactive(true)
+            .build();
+    UCSBOrganization mahjongEdit =
+        UCSBOrganization.builder()
+            .orgCode("MHJ")
+            .orgTranslationShort("Mahjong Club 2")
+            .orgTranslation("Asian Board Games Club 2")
+            .inactive(false)
+            .build();
+
+    when(ucsbOrganizationRepository.findById(eq("MHJ"))).thenReturn(Optional.of(mahjongOrig));
+
+    MvcResult response =
+        mockMvc
+            .perform(
+                put("/api/ucsborganization")
+                    .param("orgCode", "MHJ")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding("utf-8")
+                    .content(mapper.writeValueAsString(mahjongEdit))
+                    .with(csrf()))
+            .andExpect(status().isOk())
+            .andReturn();
+    verify(ucsbOrganizationRepository, times(1)).findById("MHJ");
+    verify(ucsbOrganizationRepository, times(1)).save(mahjongEdit);
+    String responseString = response.getResponse().getContentAsString();
+    assertEquals(mapper.writeValueAsString(mahjongEdit), responseString);
+  }
+
+  @WithMockUser(roles = {"ADMIN", "USER"})
+  @Test
+  public void admin_cannot_edit_organization_that_does_not_exist() throws Exception {
+    UCSBOrganization chessEdit =
+        UCSBOrganization.builder()
+            .orgCode("CHS")
+            .orgTranslationShort("Chess Club 2")
+            .orgTranslation("Super Chess Club 2")
+            .inactive(true)
+            .build();
+
+    String requestBody = mapper.writeValueAsString(chessEdit);
+
+    when(ucsbOrganizationRepository.findById(eq("CHS"))).thenReturn(Optional.empty());
+
+    // act
+    MvcResult response =
+        mockMvc
+            .perform(
+                put("/api/ucsborganization")
+                    .param("orgCode", "CHS")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding("utf-8")
+                    .content(requestBody)
+                    .with(csrf()))
+            .andExpect(status().isNotFound())
+            .andReturn();
+
+    // assert
+    verify(ucsbOrganizationRepository, times(1)).findById("CHS");
+    Map<String, Object> json = responseToJson(response);
     assertEquals("UCSBOrganization with id CHS not found", json.get("message"));
   }
 }
