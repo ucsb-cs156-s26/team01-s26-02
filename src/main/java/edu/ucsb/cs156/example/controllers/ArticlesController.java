@@ -2,6 +2,7 @@ package edu.ucsb.cs156.example.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import edu.ucsb.cs156.example.entities.Articles;
+import edu.ucsb.cs156.example.errors.EntityNotFoundException;
 import edu.ucsb.cs156.example.repositories.ArticlesRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -23,6 +24,24 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class ArticlesController extends ApiController {
   @Autowired ArticlesRepository articlesRepository;
+
+  /**
+   * Get a single article by id
+   *
+   * @param id the id of the article
+   * @return an article
+   */
+  @Operation(summary = "Get a single article")
+  @PreAuthorize("hasRole('ROLE_USER')")
+  @GetMapping("")
+  public Articles getById(@Parameter(name = "id") @RequestParam Long id) {
+    Articles article =
+        articlesRepository
+            .findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(Articles.class, id));
+
+    return article;
+  }
 
   @Operation(summary = "List all articles")
   @PreAuthorize("hasRole('ROLE_USER')")
