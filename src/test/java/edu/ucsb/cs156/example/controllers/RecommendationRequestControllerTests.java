@@ -1,6 +1,7 @@
 package edu.ucsb.cs156.example.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -221,6 +222,62 @@ public class RecommendationRequestControllerTests extends ControllerTestCase {
     assertEquals(expectedJson, responseString);
   }
 
+  // Tests for Deletion
+  @WithMockUser(roles = {"ADMIN", "USER"})
+  @Test
+  public void admin_can_delete_a_recommendationrequest() throws Exception {
+    // arrange
+
+    RecommendationRequest recReq1 =
+        RecommendationRequest.builder()
+            .requesterEmail("testRequesterEmail")
+            .professorEmail("testProfessorEmail")
+            .explanation("This is an explanation")
+            .dateRequested(LocalDateTime.parse("2022-01-03T00:00:00"))
+            .dateNeeded(LocalDateTime.parse("2023-01-03T00:00:00"))
+            .done(true)
+            .build();
+
+    when(recommendationRequestRepository.findById(eq(15L))).thenReturn(Optional.of(recReq1));
+
+    // act
+    MvcResult response =
+        mockMvc
+            .perform(delete("/api/RecommendationRequest").param("id", "15").with(csrf()))
+            .andExpect(status().isOk())
+            .andReturn();
+
+    // assert
+    verify(recommendationRequestRepository, times(1)).findById(15L);
+    verify(recommendationRequestRepository, times(1)).delete(any());
+
+    Map<String, Object> json = responseToJson(response);
+    assertEquals("RecommendationRequest with id 15 deleted", json.get("message"));
+  }
+
+  @WithMockUser(roles = {"ADMIN", "USER"})
+  @Test
+  public void
+      admin_tries_to_delete_non_existant_recommendationrequest_and_gets_right_error_message()
+          throws Exception {
+    // arrange
+
+    when(recommendationRequestRepository.findById(eq(15L))).thenReturn(Optional.empty());
+
+    // act
+    MvcResult response =
+        mockMvc
+            .perform(delete("/api/RecommendationRequest").param("id", "15").with(csrf()))
+            .andExpect(status().isNotFound())
+            .andReturn();
+
+    // assert
+    verify(recommendationRequestRepository, times(1)).findById(15L);
+    Map<String, Object> json = responseToJson(response);
+    assertEquals("RecommendationRequest with id 15 not found", json.get("message"));
+  }
+
+  // Tests for PUT (editing)
   @WithMockUser(roles = {"ADMIN", "USER"})
   @Test
   public void admin_can_edit_an_existing_recommendationrequest() throws Exception {
