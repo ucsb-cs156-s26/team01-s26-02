@@ -27,6 +27,11 @@ public class UCSBDiningCommonsMenuItemController extends ApiController {
 
   @Autowired UCSBDiningCommonsMenuItemRepository UCSBDiningCommonsMenuItemRepository;
 
+  /**
+   * List all UCSB dining commons menu items
+   *
+   * @return an iterable of UCSBDiningCommonsMenuItem
+   */
   @Operation(summary = "List all ucsb dining commons menu items")
   @PreAuthorize("hasRole('ROLE_USER')")
   @GetMapping("/all")
@@ -64,6 +69,12 @@ public class UCSBDiningCommonsMenuItemController extends ApiController {
     return savedUcsbDiningCommonsMenuItem;
   }
 
+  /**
+   * Get a single dining commons menu item by id
+   *
+   * @param id the id of the dining commons menu item
+   * @return a UCSBDiningCommonsMenuItem
+   */
   @Operation(summary = "Get a single dining commons menu item")
   @PreAuthorize("hasRole('ROLE_USER')")
   @GetMapping("")
@@ -75,6 +86,13 @@ public class UCSBDiningCommonsMenuItemController extends ApiController {
     return ucsbDiningCommonsMenuItem;
   }
 
+  /**
+   * Update a single dining commons menu item
+   *
+   * @param id id of the dining commons menu item to update
+   * @param incoming the new dining commons menu item information
+   * @return the updated dining commons menu item object
+   */
   @Operation(summary = "Update a single dining commons menu item")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @PutMapping("")
