@@ -7,6 +7,7 @@ import edu.ucsb.cs156.example.repositories.RecommendationRequestRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -110,5 +113,36 @@ public class RecommendationRequestController extends ApiController {
         recommendationRequestsRepository.save(recommendationRequest);
 
     return savedRecommendationRequest;
+  }
+
+  /**
+   * Update a single recommendation request
+   *
+   * @param id id of the recommendation request to update
+   * @param incoming the new recommendation request
+   * @return the updated recommendation request object
+   */
+  @Operation(summary = "Update a single recommendation request")
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  @PutMapping("")
+  public RecommendationRequest updateRecommendationRequest(
+      @Parameter(name = "id") @RequestParam Long id,
+      @RequestBody @Valid RecommendationRequest incoming) {
+
+    RecommendationRequest recReq =
+        recommendationRequestsRepository
+            .findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(RecommendationRequest.class, id));
+
+    recReq.setRequesterEmail(incoming.getRequesterEmail());
+    recReq.setProfessorEmail(incoming.getProfessorEmail());
+    recReq.setExplanation(incoming.getExplanation());
+    recReq.setDateRequested(incoming.getDateRequested());
+    recReq.setDateNeeded(incoming.getDateNeeded());
+    recReq.setDone(incoming.getDone());
+
+    recommendationRequestsRepository.save(recReq);
+
+    return recReq;
   }
 }
