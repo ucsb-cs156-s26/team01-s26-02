@@ -1,0 +1,60 @@
+{
+  "databaseChangeLog": [
+    {
+      "changeSet": {
+        "id": "Articles-1",
+        "author": "Bombboox",
+        "changes": [
+          {
+            "createTable": {
+              "tableName": "articles",
+              "columns": [
+                {
+                  "column": {
+                    "name": "id",
+                    "type": "BIGINT",
+                    "autoIncrement": true,
+                    "constraints": {
+                      "primaryKey": true,
+                      "primaryKeyName": "ARTICLES_PK"
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "title",
+                    "type": "VARCHAR(255)"
+                  }
+                },
+                {
+                  "column": {
+                    "name": "url",
+                    "type": "VARCHAR(255)"
+                  }
+                },
+                {
+                  "column": {
+                    "name": "explanation",
+                    "type": "VARCHAR(1000)"
+                  }
+                },
+                {
+                  "column": {
+                    "name": "email",
+                    "type": "VARCHAR(255)"
+                  }
+                },
+                {
+                  "column": {
+                    "name": "date_added",
+                    "type": "TIMESTAMP"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
