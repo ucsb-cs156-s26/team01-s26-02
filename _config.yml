@@ -23,4 +23,4 @@ repo_name: "TBD"
 repo: ucsb-cs156-s26/team01-s26-02
 owner: ucsb-cs156-s26
 repo_name: team01-s26-02
-pull_requests: [{"author":{"id":"U_kgDOBztTrQ","is_bot":false,"login":"Makkerel","name":"Kevin "},"headRefName":"Kevin-DELETERecord","number":69,"title":"added DELETE for a UCSBorganization. 100% line/mutation coverage","url":"https://github.com/ucsb-cs156-s26/team01-s26-02/pull/69"}]
+pull_requests: []
