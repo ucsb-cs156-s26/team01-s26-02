@@ -7,12 +7,15 @@ import edu.ucsb.cs156.example.repositories.MenuItemReviewRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -113,30 +116,31 @@ public class MenuItemReviewController extends ApiController {
   //   return genericMessage("UCSBDate with id %s deleted".formatted(id));
   // }
 
-  // /**
-  //  * Update a single date
-  //  *
-  //  * @param id id of the date to update
-  //  * @param incoming the new date
-  //  * @return the updated date object
-  //  */
-  // @Operation(summary = "Update a single date")
-  // @PreAuthorize("hasRole('ROLE_ADMIN')")
-  // @PutMapping("")
-  // public UCSBDate updateUCSBDate(
-  //     @Parameter(name = "id") @RequestParam Long id, @RequestBody @Valid UCSBDate incoming) {
+  /**
+   * Update a single MenuItemReview
+   *
+   * @param id id of the MenuItemReview to update
+   * @param incoming the new MenuItemReview
+   * @return the updated MenuItemReview object
+   */
+  @Operation(summary = "Update a single MenuItemReview")
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  @PutMapping("")
+  public MenuItemReview updateMenuItemReview(
+      @Parameter(name = "id") @RequestParam Long id, @RequestBody @Valid MenuItemReview incoming) {
 
-  //   UCSBDate ucsbDate =
-  //       ucsbDateRepository
-  //           .findById(id)
-  //           .orElseThrow(() -> new EntityNotFoundException(UCSBDate.class, id));
+    MenuItemReview menuItemReview =
+        menuItemReviewRepository
+            .findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(MenuItemReview.class, id));
 
-  //   ucsbDate.setQuarterYYYYQ(incoming.getQuarterYYYYQ());
-  //   ucsbDate.setName(incoming.getName());
-  //   ucsbDate.setLocalDateTime(incoming.getLocalDateTime());
+    menuItemReview.setItemId(incoming.getItemId());
+    menuItemReview.setReviewerEmail(incoming.getReviewerEmail());
+    menuItemReview.setStars(incoming.getStars());
+    menuItemReview.setDateReviewed(incoming.getDateReviewed());
+    menuItemReview.setComments(incoming.getComments());
+    menuItemReviewRepository.save(menuItemReview);
 
-  //   ucsbDateRepository.save(ucsbDate);
-
-  //   return ucsbDate;
-  // }
+    return menuItemReview;
+  }
 }
