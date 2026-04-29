@@ -47,7 +47,7 @@ public class MenuItemReviewControllerTests extends ControllerTestCase {
     mockMvc
         .perform(
             post("/api/menuitemreview/post")
-                .param("itemID", "1")
+                .param("itemId", "1")
                 .param("reviewerEmail", "reviewerEmailstring")
                 .param("stars", "5")
                 .param("dateReviewed", "2022-01-03T00:00:00")
@@ -62,7 +62,7 @@ public class MenuItemReviewControllerTests extends ControllerTestCase {
     mockMvc
         .perform(
             post("/api/menuitemreview/post")
-                .param("itemID", "1")
+                .param("itemId", "1")
                 .param("reviewerEmail", "reviewerEmailstring")
                 .param("stars", "5")
                 .param("dateReviewed", "2022-01-03T00:00:00")
@@ -143,7 +143,7 @@ public class MenuItemReviewControllerTests extends ControllerTestCase {
         mockMvc
             .perform(
                 post("/api/menuitemreview/post")
-                    .param("itemID", "1")
+                    .param("itemId", "1")
                     .param("reviewerEmail", "reviewerEmailstring")
                     .param("stars", "5")
                     .param("dateReviewed", "2022-01-03T00:00:00")

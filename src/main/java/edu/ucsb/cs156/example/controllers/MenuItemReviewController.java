@@ -26,7 +26,7 @@ public class MenuItemReviewController extends ApiController {
   @Autowired MenuItemReviewRepository menuItemReviewRepository;
 
   /**
-   * List all UCSB dates
+   * List all MenuItemReviews
    *
    * @return an iterable of UCSBDate
    */
@@ -57,7 +57,7 @@ public class MenuItemReviewController extends ApiController {
   // }
 
   /**
-   * Create a menuitemrevie
+   * Create a menuitemreview
    *
    * @param itemId
    * @param reviewerEmail
@@ -70,7 +70,7 @@ public class MenuItemReviewController extends ApiController {
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @PostMapping("/post")
   public MenuItemReview postMenuItemReview(
-      @Parameter(name = "itemId") @RequestParam long itemID,
+      @Parameter(name = "itemId") @RequestParam long itemId,
       @Parameter(name = "reviewerEmail") @RequestParam String reviewerEmail,
       @Parameter(name = "stars") @RequestParam int stars,
       @Parameter(name = "dateReviewed") @RequestParam LocalDateTime dateReviewed,
@@ -82,7 +82,7 @@ public class MenuItemReviewController extends ApiController {
 
     log.info("MenuItemReviewTime={}", dateReviewed);
     MenuItemReview menuItemReview = new MenuItemReview();
-    menuItemReview.setItemId(itemID);
+    menuItemReview.setItemId(itemId);
     menuItemReview.setReviewerEmail(reviewerEmail);
     menuItemReview.setStars(stars);
     menuItemReview.setDateReviewed(dateReviewed);
