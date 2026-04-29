@@ -2,6 +2,7 @@ package edu.ucsb.cs156.example.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import edu.ucsb.cs156.example.entities.MenuItemReview;
+import edu.ucsb.cs156.example.errors.EntityNotFoundException;
 import edu.ucsb.cs156.example.repositories.MenuItemReviewRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -38,24 +39,6 @@ public class MenuItemReviewController extends ApiController {
     return menuitemreviews;
   }
 
-  // /**
-  //  * Get a single date by id
-  //  *
-  //  * @param id the id of the date
-  //  * @return a UCSBDate
-  //  */
-  // @Operation(summary = "Get a single date")
-  // @PreAuthorize("hasRole('ROLE_USER')")
-  // @GetMapping("")
-  // public UCSBDate getById(@Parameter(name = "id") @RequestParam Long id) {
-  //   UCSBDate ucsbDate =
-  //       ucsbDateRepository
-  //           .findById(id)
-  //           .orElseThrow(() -> new EntityNotFoundException(UCSBDate.class, id));
-
-  //   return ucsbDate;
-  // }
-
   /**
    * Create a menuitemreview
    *
@@ -91,6 +74,24 @@ public class MenuItemReviewController extends ApiController {
     MenuItemReview savedMenuItemReview = menuItemReviewRepository.save(menuItemReview);
 
     return savedMenuItemReview;
+  }
+
+  /**
+   * Get a single date by menuitemreview
+   *
+   * @param id the id of the menuitemreview
+   * @return a menuitemreview
+   */
+  @Operation(summary = "Get a single menuitemreview")
+  @PreAuthorize("hasRole('ROLE_USER')")
+  @GetMapping("")
+  public MenuItemReview getById(@Parameter(name = "id") @RequestParam Long id) {
+    MenuItemReview menuItemReview =
+        menuItemReviewRepository
+            .findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(MenuItemReview.class, id));
+
+    return menuItemReview;
   }
 
   // /**
