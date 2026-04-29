@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MenuItemReviewController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">team01</a> &gt; <a href="index.source.html" class="el_package">edu.ucsb.cs156.example.controllers</a> &gt; <span class="el_source">MenuItemReviewController.java</span></div><h1>MenuItemReviewController.java</h1><pre class="source lang-java linenums">package edu.ucsb.cs156.example.controllers;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import edu.ucsb.cs156.example.entities.MenuItemReview;
+import edu.ucsb.cs156.example.errors.EntityNotFoundException;
+import edu.ucsb.cs156.example.repositories.MenuItemReviewRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import java.time.LocalDateTime;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+/** This is a REST controller for UCSBDates */
+@Tag(name = &quot;MenuItemReview&quot;)
+@RequestMapping(&quot;/api/menuitemreview&quot;)
+@RestController
+<span class="fc" id="L28">@Slf4j</span>
+<span class="fc" id="L29">public class MenuItemReviewController extends ApiController {</span>
+
+  @Autowired MenuItemReviewRepository menuItemReviewRepository;
+
+  /**
+   * List all MenuItemReviews
+   *
+   * @return an iterable of UCSBDate
+   */
+  @Operation(summary = &quot;List all Menu Item Reviews&quot;)
+  @PreAuthorize(&quot;hasRole('ROLE_USER')&quot;)
+  @GetMapping(&quot;/all&quot;)
+  public Iterable&lt;MenuItemReview&gt; allMenuItemReviews() {
+<span class="fc" id="L42">    Iterable&lt;MenuItemReview&gt; menuitemreviews = menuItemReviewRepository.findAll();</span>
+<span class="fc" id="L43">    return menuitemreviews;</span>
+  }
+
+  /**
+   * Create a menuitemreview
+   *
+   * @param itemId
+   * @param reviewerEmail
+   * @param stars
+   * @param dateReviewed
+   * @param comments
+   * @return the saved menuitemreview
+   */
+  @Operation(summary = &quot;Create a new menuitemreview&quot;)
+  @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+  @PostMapping(&quot;/post&quot;)
+  public MenuItemReview postMenuItemReview(
+      @Parameter(name = &quot;itemId&quot;) @RequestParam long itemId,
+      @Parameter(name = &quot;reviewerEmail&quot;) @RequestParam String reviewerEmail,
+      @Parameter(name = &quot;stars&quot;) @RequestParam int stars,
+      @Parameter(name = &quot;dateReviewed&quot;) @RequestParam LocalDateTime dateReviewed,
+      @Parameter(name = &quot;comments&quot;) @RequestParam String comments)
+      throws JsonProcessingException {
+
+    // For an explanation of @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    // See: https://www.baeldung.com/spring-date-parameters
+
+<span class="fc" id="L70">    log.info(&quot;MenuItemReviewTime={}&quot;, dateReviewed);</span>
+<span class="fc" id="L71">    MenuItemReview menuItemReview = new MenuItemReview();</span>
+<span class="fc" id="L72">    menuItemReview.setItemId(itemId);</span>
+<span class="fc" id="L73">    menuItemReview.setReviewerEmail(reviewerEmail);</span>
+<span class="fc" id="L74">    menuItemReview.setStars(stars);</span>
+<span class="fc" id="L75">    menuItemReview.setDateReviewed(dateReviewed);</span>
+<span class="fc" id="L76">    menuItemReview.setComments(comments);</span>
+
+<span class="fc" id="L78">    MenuItemReview savedMenuItemReview = menuItemReviewRepository.save(menuItemReview);</span>
+
+<span class="fc" id="L80">    return savedMenuItemReview;</span>
+  }
+
+  /**
+   * Get a single date by menuitemreview
+   *
+   * @param id the id of the menuitemreview
+   * @return a menuitemreview
+   */
+  @Operation(summary = &quot;Get a single menuitemreview&quot;)
+  @PreAuthorize(&quot;hasRole('ROLE_USER')&quot;)
+  @GetMapping(&quot;&quot;)
+  public MenuItemReview getById(@Parameter(name = &quot;id&quot;) @RequestParam Long id) {
+<span class="fc" id="L93">    MenuItemReview menuItemReview =</span>
+        menuItemReviewRepository
+<span class="fc" id="L95">            .findById(id)</span>
+<span class="fc" id="L96">            .orElseThrow(() -&gt; new EntityNotFoundException(MenuItemReview.class, id));</span>
+
+<span class="fc" id="L98">    return menuItemReview;</span>
+  }
+
+  // /**
+  //  * Delete a UCSBDate
+  //  *
+  //  * @param id the id of the date to delete
+  //  * @return a message indicating the date was deleted
+  //  */
+  // @Operation(summary = &quot;Delete a UCSBDate&quot;)
+  // @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+  // @DeleteMapping(&quot;&quot;)
+  // public Object deleteUCSBDate(@Parameter(name = &quot;id&quot;) @RequestParam Long id) {
+  //   UCSBDate ucsbDate =
+  //       ucsbDateRepository
+  //           .findById(id)
+  //           .orElseThrow(() -&gt; new EntityNotFoundException(UCSBDate.class, id));
+
+  //   ucsbDateRepository.delete(ucsbDate);
+  //   return genericMessage(&quot;UCSBDate with id %s deleted&quot;.formatted(id));
+  // }
+
+  /**
+   * Update a single MenuItemReview
+   *
+   * @param id id of the MenuItemReview to update
+   * @param incoming the new MenuItemReview
+   * @return the updated MenuItemReview object
+   */
+  @Operation(summary = &quot;Update a single MenuItemReview&quot;)
+  @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+  @PutMapping(&quot;&quot;)
+  public MenuItemReview updateMenuItemReview(
+      @Parameter(name = &quot;id&quot;) @RequestParam Long id, @RequestBody @Valid MenuItemReview incoming) {
+
+<span class="fc" id="L133">    MenuItemReview menuItemReview =</span>
+        menuItemReviewRepository
+<span class="fc" id="L135">            .findById(id)</span>
+<span class="fc" id="L136">            .orElseThrow(() -&gt; new EntityNotFoundException(MenuItemReview.class, id));</span>
+
+<span class="fc" id="L138">    menuItemReview.setItemId(incoming.getItemId());</span>
+<span class="fc" id="L139">    menuItemReview.setReviewerEmail(incoming.getReviewerEmail());</span>
+<span class="fc" id="L140">    menuItemReview.setStars(incoming.getStars());</span>
+<span class="fc" id="L141">    menuItemReview.setDateReviewed(incoming.getDateReviewed());</span>
+<span class="fc" id="L142">    menuItemReview.setComments(incoming.getComments());</span>
+<span class="fc" id="L143">    menuItemReviewRepository.save(menuItemReview);</span>
+
+<span class="fc" id="L145">    return menuItemReview;</span>
+  }
+
+  /**
+   * Delete a MenuItemReview
+   *
+   * @param id the id of the menuitemreview to delete
+   * @return a message indicating the menuitemreview was deleted
+   */
+  @Operation(summary = &quot;Delete a MenuItemReview&quot;)
+  @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+  @DeleteMapping(&quot;&quot;)
+  public Object deleteMenuItemReview(@Parameter(name = &quot;id&quot;) @RequestParam Long id) {
+<span class="fc" id="L158">    MenuItemReview MenuItemReview =</span>
+        menuItemReviewRepository
+<span class="fc" id="L160">            .findById(id)</span>
+<span class="fc" id="L161">            .orElseThrow(() -&gt; new EntityNotFoundException(MenuItemReview.class, id));</span>
+
+<span class="fc" id="L163">    menuItemReviewRepository.delete(MenuItemReview);</span>
+<span class="fc" id="L164">    return genericMessage(&quot;MenuItemReview with id %s deleted&quot;.formatted(id));</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
